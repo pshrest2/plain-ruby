@@ -6,12 +6,10 @@ server = TCPServer.new(PORT)
 loop do
     client = server.accept
 
-    client.puts "What's your name?"
-    input = client.gets
-    puts "Received #{input.chomp} from a client socket on port #{PORT}"
-    client.puts "Hi, #{input.chomp}! You've successfully connected to the server socket."
-
-    puts "Closing client socket"
-    client.puts "GoodBye #{input.chomp}"
+    request_line = client.readline
+    puts "HTTP request looks like this #{request_line}"
+    method_token, target, version_number = request_line.split 
+    response_body =  "Received a #{method_token} request to #{target} with #{version_number}"
+    client.puts response_body
     client.close
 end
